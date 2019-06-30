@@ -1,9 +1,12 @@
 #!/usr/bin/python3
+
+# Destorys the vutlr server the script is run on
 import requests
 import sys
 import json
+from config import config
 
-API_KEY = "put-vultr-api-key-here"
+API_KEY = config["vultr-token"]
 
 base_url = "https://api.vultr.com/"
 

@@ -1,0 +1,32 @@
+#!/usr/bin/python3
+
+import sys
+import os
+import argparse
+import config
+
+parser = argparse.ArgumentParser()
+
+# TODO: configure should be able to run after the thing has been created
+required_args = {
+    "vultr-token"   : "Token to manage vultr servers",
+    "dropbox-token" : "Token to backup world to dropbox",
+    "server-link"   : "Link to the server zip file",
+}
+
+optional_args = {
+   "world-link"  : "Specify if you don't want to create a new world"
+}
+
+for arg in required_args:
+    parser.add_argument(arg, help = required_args[arg])
+for arg in optional_args:
+    parser.add_argument("--"+arg, help=optional_args[arg])
+
+args = vars(parser.parse_args())
+new_config = {}
+
+for arg in args:
+    new_config[arg] = args[arg]
+
+config.save_config(new_config)
