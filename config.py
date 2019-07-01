@@ -1,8 +1,10 @@
 #!/usr/bin/python3
 import json
+import os
 
+basedir = os.path.dirname(__file__)
 
-config_file = "config.json"
+config_file = os.path.join(basedir, "config.json")
 def load_config():
 
     config_raw = open (config_file, "r").read()
