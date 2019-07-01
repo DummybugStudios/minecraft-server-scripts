@@ -16,7 +16,6 @@ os.symlink("destroy.py", "/usr/local/bin/destroy")
 
 # Replace with the config
 server_root = config["root_directory"]
-start_cmd = "ServerStart.sh"
 server_name = "server.zip"
 
 try:
@@ -35,4 +34,4 @@ if world_link:
     os.system(f'unzip world.zip')
     os.remove("world.zip")
 
-os.system(f"screen -S server -dm {start_cmd}")
+os.system(f"screen -S server -dm {config["start-cmd"]}")
