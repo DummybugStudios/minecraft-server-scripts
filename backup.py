@@ -16,7 +16,7 @@ config = c.load_config()
 
 basepath = config["root_directory"]
 filenames = ["world", "server.properties", "ops.json"]
-zipname  = "world.zip"
+zipname  = config["server-name"] + ".zip"
 
 TOKEN = config["dropbox-token"]
 

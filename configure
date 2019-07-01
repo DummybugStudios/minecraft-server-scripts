@@ -12,6 +12,7 @@ required_args = {
     "vultr-token"   : "Token to manage vultr servers",
     "dropbox-token" : "Token to backup world to dropbox",
     "server-link"   : "Link to the server zip file",
+    "server-name"   : "server_name to keep dropbox zip files organised"
 }
 
 optional_args = {
