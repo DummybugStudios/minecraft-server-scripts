@@ -34,4 +34,4 @@ if world_link:
     os.system(f'unzip world.zip')
     os.remove("world.zip")
 
-os.system(f"screen -S server -dm {config["start-cmd"]}")
+os.system(f"screen -S server -dm \"{config['start-cmd']}\"")
