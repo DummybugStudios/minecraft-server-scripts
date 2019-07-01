@@ -25,12 +25,12 @@ except FileExistsError:
 
 os.chdir(server_root)
 
-os.system(f'wget {server_link} -o {server_name}')
+os.system(f'wget {server_link} -O {server_name}')
 os.system(f'unzip {server_name}')
 
 
 if world_link:
-    os.system(f'wget {world_link} -o world.zip')
+    os.system(f'wget {world_link} -O world.zip')
     os.system(f'unzip world.zip')
     os.remove("world.zip")
 
