@@ -14,7 +14,7 @@ from dropbox.exceptions import ApiError, AuthError
 config = c.load_config()
 #TODO: make a mechanism to configure all this for future scripts
 
-basepath = "/root/minecraft"
+basepath = config["root_directory"]
 filenames = ["world", "server.properties", "ops.json"]
 zipname  = "world.zip"
 

@@ -15,7 +15,7 @@ os.symlink("backup.py","/usr/local/bin/backup")
 os.symlink("destroy.py", "/usr/local/bin/destroy")
 
 # Replace with the config
-server_root = "/root/minecraft"
+server_root = config["root_directory"]
 start_cmd = "ServerStart.sh"
 server_name = "server.zip"
 
