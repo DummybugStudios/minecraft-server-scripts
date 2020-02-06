@@ -4,7 +4,9 @@
 import requests
 import sys
 import json
-from config import config
+import config as c
+
+config = c.load_config()
 
 API_KEY = config["vultr-token"]
 
