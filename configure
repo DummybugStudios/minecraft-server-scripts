@@ -26,6 +26,15 @@ for arg in required_args:
 for arg in optional_args:
     parser.add_argument("--"+arg, help=optional_args[arg])
 
+parser.add_argument(
+        "--extract-server",
+        dest = "extract",
+        help = "Specify if you downloaded server needs to be unzipped before it can be used",
+        action = "store_true"
+        )
+
+parser.set_defaults(extract=False)
+
 args = vars(parser.parse_args())
 config = {}
 

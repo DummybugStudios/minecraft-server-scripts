@@ -8,6 +8,7 @@ config = c.load_config()
 
 world_link = config["world_link"]
 server_link = config["server-link"]
+extract = config["extract"]
 
 # Symlink the other shit
 # TODO: add ability to change the install location
@@ -16,7 +17,8 @@ os.symlink("destroy.py", "/usr/local/bin/destroy")
 
 # Replace with the config
 server_root = config["root_directory"]
-server_name = "server.zip"
+server_name = "server.%s"%("zip" if extract else "jar")
+print(server_name)
 
 try:
     os.mkdir(server_root)
@@ -26,7 +28,8 @@ except FileExistsError:
 os.chdir(server_root)
 
 os.system(f'wget {server_link} -O {server_name}')
-os.system(f'unzip {server_name}')
+if extract: 
+    os.system(f'unzip {server_name}')
 
 
 if world_link:

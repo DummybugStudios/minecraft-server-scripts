@@ -12,7 +12,7 @@ def load_config():
     return config
 
 def save_config(new_config):
-    config_string = json.dumps(new_config)
+    config_string = json.dumps(new_config, indent=4)
     f = open(config_file, "w")
     f.write(config_string)
     f.close()
