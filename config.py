@@ -16,3 +16,10 @@ def save_config(new_config):
     f = open(config_file, "w")
     f.write(config_string)
     f.close()
+
+
+def save_temp_config(new_config):
+    pass
+
+def load_temp_config():
+    pass

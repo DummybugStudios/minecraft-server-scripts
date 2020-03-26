@@ -1,47 +1,114 @@
 #!/usr/bin/python3
 
-import sys
 import os
-import argparse
-import config as c
+import requests
 
-parser = argparse.ArgumentParser()
+import dropbox
+from dropbox.exceptions import AuthError, BadInputError
 
-# TODO: configure should be able to run after the thing has been created
-required_args = {
-    "vultr-token"   : "Token to manage vultr servers",
-    "dropbox-token" : "Token to backup world to dropbox",
-    "server-link"   : "Link to the server zip file",
-    "server-name"   : "server_name to keep dropbox zip files organised",
-    "start-cmd"     : "command to start the server",
-}
+import config 
 
-optional_args = {
-   "world-link"  : "Specify if you don't want to create a new world",
-   "root-directory": "directory the server will be downloaded in. ~/minecraft by default.",
-}
+VULTR_BASE = "https://api.vultr.com"
 
-for arg in required_args:
-    parser.add_argument(arg, help = required_args[arg])
-for arg in optional_args:
-    parser.add_argument("--"+arg, help=optional_args[arg])
+tempOptions={}
+options = {}
 
-parser.add_argument(
-        "--extract-server",
-        dest = "extract",
-        help = "Specify if you downloaded server needs to be unzipped before it can be used",
-        action = "store_true"
-        )
 
-parser.set_defaults(extract=False)
+def checkValidLink(link):
+    try: 
+        res = requests.head(link) 
+    # TODO maybe except more specific issues
+    except:
+        return False
 
-args = vars(parser.parse_args())
-config = {}
+    if res.status_code not in [200,301,302]:
+        return False
+    return True
 
-for arg in args:
-    config[arg] = args[arg]
 
-if not args["root_directory"]:
-    config["root_directory"] = os.path.join(os.path.expanduser("~"), "minecraft")
+while True:
+    valid = True
+    dropboxToken = input("Dropbox token: ")
+    dbx = dropbox.Dropbox(dropboxToken)
+    try: 
+        dbx.users_get_current_account()
+    except (AuthError, BadInputError):
+        print("Invalid token")
+        valid = False
+    
+    if valid: break
 
-c.save_config(config)
+tempOptions["dropbox-token"] = dropboxToken
+
+#TODO make sure it doesn't already exist?
+while True: 
+    valid = True
+    serverName = input("Server name: ").strip()
+
+    if not serverName:
+        print("Server name can't be empty")
+        valid = False
+
+    if valid: break
+
+
+tempOptions["server-name"] = serverName
+
+while True: 
+    valid =True
+    serverLink = input("Server Link: ").strip()
+    if not serverLink:
+        print("Server link can't be empty")
+        valid = False
+
+    if not checkValidLink(serverLink):
+        print("Link not valid - doesn't give valid response")
+        valid = False
+
+    if valid: break
+
+options["server-link"] = serverLink
+
+while True:
+    valid = True
+    extract = input("Does the server need to be unzipped y/n: ").strip().lower()
+
+    if extract.startswith('y'):
+        extract = True
+    elif extract.startswith('n'):
+        extract = False
+    else:
+        valid = False
+
+    if valid: break 
+
+options["extract"] = extract
+
+while True:
+    valid = True
+    rootDirectory = input("Current location of minecraft server: ").strip()
+    rootDirectory = os.path.expanduser(rootDirectory)
+    if not os.path.isdir(rootDirectory):
+        valid = False
+        print("Invalid directory")
+
+    if valid: break
+
+tempOptions["root-directory"] = rootDirectory
+
+while True:
+    valid = True
+    vultrToken = input("Vultr token (for destroy script): ") 
+    res = requests.get(f'{VULTR_BASE}/v1/server/list', headers={'API-Key':vultrToken})
+    if res.status_code != 200:
+        print ("Invalid token")
+        valid = False
+
+    if valid: break
+options["vultr-token"] = vultrToken
+
+print(options)
+print(tempOptions)
+
+config.save_config(options)
+config.save_temp_config(tempOptions)
