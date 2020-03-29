@@ -97,9 +97,17 @@ while True:
 
 tempOptions["root-directory"] = rootDirectory
 
+
+defaultStartCmd = "java -jar -Xmx1792M server.jar nogui"
+startCmd = input(f"Command to start the server: ({defaultStartCmd})").strip()
+if not startCmd:
+    startCmd = defaultStartCmd
+
+options["start-cmd"] = startCmd
+
 while True:
     valid = True
-    vultrToken = input("Vultr token (for destroy script): ") 
+    vultrToken = input("Vultr token (for destroy script): ").strip()
     res = requests.get(f'{VULTR_BASE}/v1/server/list', headers={'API-Key':vultrToken})
     if res.status_code != 200:
         print ("Invalid token")
@@ -107,6 +115,7 @@ while True:
 
     if valid: break
 options["vultr-token"] = vultrToken
+
 
 print(options)
 print(tempOptions)
