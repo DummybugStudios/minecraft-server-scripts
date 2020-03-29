@@ -105,16 +105,13 @@ if not startCmd:
 
 options["start-cmd"] = startCmd
 
-while True:
-    valid = True
-    vultrToken = input("Vultr token (for destroy script): ").strip()
-    res = requests.get(f'{VULTR_BASE}/v1/server/list', headers={'API-Key':vultrToken})
-    if res.status_code != 200:
-        print ("Invalid token")
-        valid = False
 
-    if valid: break
-options["vultr-token"] = vultrToken
+# Get the vultr token I uploaded from dropbox
+dbx = dropbox.Dropbox(dropboxToken)
+
+# TODO: ask for the token and save it to the apps folder if it's missing or invalid
+tempOptions["vultr-token"] = dbx.files_download("/vultr.token")[1].text.strip()
+
 
 
 print(options)
@@ -125,8 +122,5 @@ config.save_temp_config(tempOptions)
 
 
 # upload the config to the dropbox thingy
-
-dbx = dropbox.Dropbox(dropboxToken)
-
 with open("config.json", "rb") as f:
     dbx.files_upload(f.read(), f"/{serverName}/config.json", mode=WriteMode('overwrite'))
