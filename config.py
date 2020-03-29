@@ -1,11 +1,13 @@
 import json
 import os
 
+# Get the path relative to the current directory
 basedir = os.path.dirname(__file__)
 
 config_file = os.path.join(basedir, "config.json")
-def load_config():
+temp_config = os.path.join(basedir, "tempconfig.json")
 
+def load_config():
     config_raw = open (config_file, "r").read()
     config = json.loads(config_raw)
 
@@ -19,7 +21,10 @@ def save_config(new_config):
 
 
 def save_temp_config(new_config):
-    pass
+    with open(temp_config, "w") as f:
+        f.write ( json.dumps(new_config, indent=4) )
 
 def load_temp_config():
-    pass
+    with open(temp_config, "r") as f:
+        raw = f.read()
+        return (json.loads(raw))
